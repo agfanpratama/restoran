@@ -10,7 +10,7 @@ def connect_db():
         host="localhost",
         user="root",  # Ganti dengan user database kamu
         password="",  # Ganti dengan password database kamu
-        database="restaurant_db"
+        database="sigma_db"
     )
 
 # Fungsi untuk menangani request dari client
@@ -77,7 +77,9 @@ def start_server(log_widget):
     
     server_running = True
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(('0.0.0.0', 8080))  # Server dapur berjalan di port 8080
+    #server_socket.bind(('0.0.0.0', 8080))  # Server dapur berjalan di port 8080
+    server_socket.bind(('192.168.110.5', 8080))
+    
     server_socket.listen(5)
     log_widget.insert(tk.END, "Server dapur berjalan di port 8080...\n")
 
