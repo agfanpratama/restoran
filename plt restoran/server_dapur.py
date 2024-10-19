@@ -24,7 +24,7 @@ def handle_client(client_socket, log_widget):
                 break
             
             if not server_running:
-                client_socket.send("192.168.100.43.".encode('utf-8'))
+                client_socket.send("192.168.110.214".encode('utf-8'))
                 client_socket.close()
                 break
 
@@ -69,28 +69,40 @@ def handle_client(client_socket, log_widget):
         log_widget.insert(tk.END, f"Error: {e}\n")
         client_socket.close()
 
+# Tambahkan variabel noID global
+noID_counter = 1
+
 # Server utama untuk menerima koneksi client
 def start_server(log_widget):
-    global server_thread, server_socket, server_running
+    global server_thread, server_socket, server_running, noID_counter
     if server_running:
         log_widget.insert(tk.END, "Server sudah berjalan...\n")
         return
     
     server_running = True
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #server_socket.bind(('0.0.0.0', 8080))  # Server dapur berjalan di port 8080
-    server_socket.bind(('192.168.100.43', 8080))
+    server_socket.bind(('192.168.110.214', 8080))
     
     server_socket.listen(5)
     log_widget.insert(tk.END, "Server dapur berjalan di port 8080...\n")
 
     def accept_clients():
+        global noID_counter
         while server_running:
             try:
                 client_socket, addr = server_socket.accept()
-                log_widget.insert(tk.END, f"Terhubung dengan {addr}\n")
+                # Ambil informasi alamat IP dan port client
+                client_ip, client_port = addr
+                # Format pesan terhubung dengan noID, IP client, dan port client
+                connect_message = f"Terhubung dengan {noID_counter}_{client_ip}_{client_port}"
+                log_widget.insert(tk.END, connect_message + "\n")
+                
+                # Jalankan thread untuk menangani client
                 client_handler = threading.Thread(target=handle_client, args=(client_socket, log_widget))
                 client_handler.start()
+                
+                # Increment noID untuk client berikutnya
+                noID_counter += 1
             except socket.error:
                 break
 
