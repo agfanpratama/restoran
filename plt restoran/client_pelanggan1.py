@@ -11,7 +11,7 @@ def send_request(request):
     if client_socket is None:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #client_socket.connect(('localhost', 8080))  # Connect to server
-        client_socket.connect(('192.168.110.5', 8080))  # Connect to server
+        client_socket.connect(('192.168.110.214', 8080))  # Connect to server
 
     client_socket.send(request.encode('utf-8'))
     response = client_socket.recv(4096).decode('utf-8')
@@ -111,12 +111,16 @@ def client_gui():
             output_widget.insert(tk.END, f"{item}: Tidak ada porsi untuk ditambahkan\n")
 
     # Function to cancel the order
-    def batalkan_pesanan(item):
+# Function to cancel the order and reset count to 0
+    def batalkan_pesanan(item, label):
         if item in confirmed_orders:
-            del confirmed_orders[item]  # Remove item from confirmed orders
-            output_widget.insert(tk.END, f"{item}: Pesanan dibatalkan\n")
+            confirmed_orders[item] = 0  # Reset confirmed orders to 0
+            item_order_count[item] = 0  # Reset item count to 0
+            label.config(text="0")  # Update the label to show 0
+            output_widget.insert(tk.END, f"{item}: Pesanan dibatalkan, jumlah direset ke 0\n")
         else:
             output_widget.insert(tk.END, f"{item}: Tidak ada pesanan untuk dibatalkan\n")
+
 
     # Function to review the orders added and total payment
     def review_pesanan():
@@ -170,8 +174,9 @@ def client_gui():
                 add_button.pack(side=tk.LEFT)
 
                 # Add button to cancel the order
-                cancel_button = tk.Button(item_frame, text="Cancel", command=lambda i=item_name: batalkan_pesanan(i))
+                cancel_button = tk.Button(item_frame, text="Cancel", command=lambda i=item_name, l=jumlah_label: batalkan_pesanan(i, l))
                 cancel_button.pack(side=tk.LEFT)
+
 
     # Automatically fetch the menu when the app starts
     tampilkan_menu()
