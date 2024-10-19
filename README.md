@@ -1,2 +1,2 @@
 # restoran
-ini adalah projek Perangkat Lunak Terdistribusi dari Kelompok Ceria
+ini adalah projek Perangkat Lunak Terdistribusi dari Kelompok Ceriaa
