@@ -3,6 +3,7 @@ import socket
 import mysql.connector
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+from PIL import Image, ImageTk
 
 # Koneksi ke MySQL Database
 def connect_db():
@@ -23,7 +24,7 @@ def handle_client(client_socket, log_widget):
                 break
             
             if not server_running:
-                client_socket.send("Server sedang tidak aktif.".encode('utf-8'))
+                client_socket.send("192.168.100.43.".encode('utf-8'))
                 client_socket.close()
                 break
 
@@ -78,7 +79,7 @@ def start_server(log_widget):
     server_running = True
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     #server_socket.bind(('0.0.0.0', 8080))  # Server dapur berjalan di port 8080
-    server_socket.bind(('192.168.110.5', 8080))
+    server_socket.bind(('192.168.100.43', 8080))
     
     server_socket.listen(5)
     log_widget.insert(tk.END, "Server dapur berjalan di port 8080...\n")
@@ -118,6 +119,12 @@ def server_gui():
 
     root = tk.Tk()
     root.title("Server Dapur")
+
+    program_icon = Image.open("logo.png")  # Replace 'icon.png' with the actual path of your program icon file
+    program_icon_photo = ImageTk.PhotoImage(program_icon)  # Convert to PhotoImage object
+
+    # Set the program icon (icon displayed in the top-left corner of the window)
+    root.iconphoto(False, program_icon_photo)  # False means it's the window's main icon
 
     log_label = tk.Label(root, text="Log Pesanan:")
     log_label.pack()
