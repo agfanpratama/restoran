@@ -11,7 +11,7 @@ def send_request(request):
     global client_socket
     if client_socket is None:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect(('192.168.100.43', 8080))  # Connect to server
+        client_socket.connect(('192.168.110.214', 8080))  # Connect to server
 
     client_socket.send(request.encode('utf-8'))
     response = client_socket.recv(4096).decode('utf-8')
